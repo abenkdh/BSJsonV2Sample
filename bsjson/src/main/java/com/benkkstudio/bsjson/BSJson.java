@@ -43,6 +43,9 @@ public class BSJson {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    if (bsJsonOnSuccessListener != null) {
+                        bsJsonOnSuccessListener.onFiled(statusCode, responseBody, error);
+                    }
                 }
             });
         } else {
@@ -54,9 +57,12 @@ public class BSJson {
                         bsJsonOnSuccessListener.onSuccess(statusCode, responseBody);
                     }
                 }
-                
+
                 @Override
                 public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    if (bsJsonOnSuccessListener != null) {
+                        bsJsonOnSuccessListener.onFiled(statusCode, responseBody, error);
+                    }
                 }
             });
         }
