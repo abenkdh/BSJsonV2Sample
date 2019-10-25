@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a6f4b6d9-5f30-4d5c-a8c5-e58aeb1c132e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/bsjson/src/main/java/com/benkkstudio/bsjson/BSJson.java" beforeDir="false" afterPath="$PROJECT_DIR$/bsjson/src/main/java/com/benkkstudio/bsjson/BSJson.java" afterDir="false" />
-    </list>
+    <list default="true" id="a6f4b6d9-5f30-4d5c-a8c5-e58aeb1c132e" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/build/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -47,7 +45,7 @@
         <entry file="file://$PROJECT_DIR$/bsjson/src/main/java/com/benkkstudio/bsjson/BSJson.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1350">
-              <caret line="77" column="1" lean-forward="true" selection-start-line="77" selection-start-column="1" selection-end-line="77" selection-end-column="1" />
+              <caret line="77" column="1" selection-start-line="77" selection-start-column="1" selection-end-line="77" selection-end-column="1" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -296,7 +294,7 @@
     <entry file="file://$PROJECT_DIR$/bsjson/src/main/java/com/benkkstudio/bsjson/BSJson.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1350">
-          <caret line="77" column="1" lean-forward="true" selection-start-line="77" selection-start-column="1" selection-end-line="77" selection-end-column="1" />
+          <caret line="77" column="1" selection-start-line="77" selection-start-column="1" selection-end-line="77" selection-end-column="1" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
