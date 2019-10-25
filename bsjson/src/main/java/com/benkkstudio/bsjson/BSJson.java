@@ -29,21 +29,38 @@ public class BSJson {
     }
 
     private void load(){
-        AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-        params.put("data", API.toBase64(jsObj.toString()));
-        client.post(server, params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                if (bsJsonOnSuccessListener != null) {
-                    bsJsonOnSuccessListener.onSuccess(statusCode, responseBody);
+        if(jsObj != null){
+            AsyncHttpClient client = new AsyncHttpClient();
+            RequestParams params = new RequestParams();
+            params.put("data", API.toBase64(jsObj.toString()));
+            client.post(server, params, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    if (bsJsonOnSuccessListener != null) {
+                        bsJsonOnSuccessListener.onSuccess(statusCode, responseBody);
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                }
+            });
+        } else {
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.post(server, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    if (bsJsonOnSuccessListener != null) {
+                        bsJsonOnSuccessListener.onSuccess(statusCode, responseBody);
+                    }
+                }
+                
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                }
+            });
+        }
+
     }
 
     public static class Builder {
