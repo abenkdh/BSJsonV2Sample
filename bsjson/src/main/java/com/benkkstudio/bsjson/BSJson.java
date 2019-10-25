@@ -2,7 +2,6 @@ package com.benkkstudio.bsjson;
 
 import android.app.Activity;
 
-import androidx.annotation.NonNull;
 
 import com.benkkstudio.bsjson.Interface.BSJsonOnSuccessListener;
 import com.google.gson.JsonObject;
@@ -18,10 +17,10 @@ public class BSJson {
     private JsonObject jsObj;
     private BSJsonOnSuccessListener bsJsonOnSuccessListener;
 
-    private BSJson(@NonNull Activity activity,
-                       @NonNull String server,
-                       @NonNull JsonObject jsObj,
-                       @NonNull BSJsonOnSuccessListener bsJsonOnSuccessListener) {
+    private BSJson(Activity activity,
+                       String server,
+                       JsonObject jsObj,
+                       BSJsonOnSuccessListener bsJsonOnSuccessListener) {
         this.activity = activity;
         this.server = server;
         this.jsObj = jsObj;
@@ -53,26 +52,25 @@ public class BSJson {
         private JsonObject jsObj;
         private BSJsonOnSuccessListener bsJsonOnSuccessListener;
 
-        public Builder(@NonNull Activity activity) {
+        public Builder(Activity activity) {
             this.activity = activity;
         }
-        @NonNull
-        public BSJson.Builder setServer(@NonNull String server) {
+
+        public BSJson.Builder setServer(String server) {
             this.server = server;
             return this;
         }
-        @NonNull
-        public BSJson.Builder setObject(@NonNull JsonObject jsObj) {
+
+        public BSJson.Builder setObject(JsonObject jsObj) {
             this.jsObj = jsObj;
             return this;
         }
-        @NonNull
-        public BSJson.Builder setListener(@NonNull BSJsonOnSuccessListener bsJsonOnSuccessListener) {
+
+        public BSJson.Builder setListener(BSJsonOnSuccessListener bsJsonOnSuccessListener) {
             this.bsJsonOnSuccessListener = bsJsonOnSuccessListener;
             return this;
         }
 
-        @NonNull
         public BSJson load() {
             return new BSJson(activity, server, jsObj, bsJsonOnSuccessListener);
         }
