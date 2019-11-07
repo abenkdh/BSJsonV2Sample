@@ -112,7 +112,7 @@ public class BSJson {
             return this;
         }
 
-        public BSJson.Builder setObject(RequestParams requestParams) {
+        public BSJson.Builder setParams(RequestParams requestParams) {
             this.requestParams = requestParams;
             return this;
         }
