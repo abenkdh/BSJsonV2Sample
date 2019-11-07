@@ -16,24 +16,47 @@ public class BSJson {
     private String server;
     private JsonObject jsObj;
     private BSJsonOnSuccessListener bsJsonOnSuccessListener;
+    private RequestParams requestParams;
+    private boolean isLoading = false;
 
     private BSJson(Activity activity,
-                       String server,
-                       JsonObject jsObj,
-                       BSJsonOnSuccessListener bsJsonOnSuccessListener) {
+                   String server,
+                   JsonObject jsObj,
+                   RequestParams requestParams,
+                   BSJsonOnSuccessListener bsJsonOnSuccessListener) {
         this.activity = activity;
         this.server = server;
         this.jsObj = jsObj;
+        this.requestParams = requestParams;
         this.bsJsonOnSuccessListener = bsJsonOnSuccessListener;
         load();
     }
 
-    private void load(){
-        if(jsObj != null){
-            AsyncHttpClient client = new AsyncHttpClient();
+    private void load() {
+        isLoading = true;
+        if (jsObj != null) {
+            Constant.client = new AsyncHttpClient();
             RequestParams params = new RequestParams();
             params.put("data", API.toBase64(jsObj.toString()));
-            client.post(server, params, new AsyncHttpResponseHandler() {
+            Constant.client.post(server, params, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    if (bsJsonOnSuccessListener != null) {
+                        bsJsonOnSuccessListener.onSuccess(statusCode, responseBody);
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    if (bsJsonOnSuccessListener != null) {
+                        bsJsonOnSuccessListener.onFiled(statusCode, responseBody, error);
+                    }
+                }
+            });
+        } else if (requestParams != null){
+            Constant.client = new AsyncHttpClient();
+            requestParams = new RequestParams();
+            Constant.client.post(server, requestParams, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                     if (bsJsonOnSuccessListener != null) {
@@ -49,8 +72,8 @@ public class BSJson {
                 }
             });
         } else {
-            AsyncHttpClient client = new AsyncHttpClient();
-            client.post(server, new AsyncHttpResponseHandler() {
+            Constant.client = new AsyncHttpClient();
+            Constant.client.post(server, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                     if (bsJsonOnSuccessListener != null) {
@@ -66,7 +89,7 @@ public class BSJson {
                 }
             });
         }
-
+        isLoading = false;
     }
 
     public static class Builder {
@@ -74,7 +97,7 @@ public class BSJson {
         private String server;
         private JsonObject jsObj;
         private BSJsonOnSuccessListener bsJsonOnSuccessListener;
-
+        private RequestParams requestParams;
         public Builder(Activity activity) {
             this.activity = activity;
         }
@@ -89,13 +112,25 @@ public class BSJson {
             return this;
         }
 
+        public BSJson.Builder setObject(RequestParams requestParams) {
+            this.requestParams = requestParams;
+            return this;
+        }
+
+
         public BSJson.Builder setListener(BSJsonOnSuccessListener bsJsonOnSuccessListener) {
             this.bsJsonOnSuccessListener = bsJsonOnSuccessListener;
             return this;
         }
 
         public BSJson load() {
-            return new BSJson(activity, server, jsObj, bsJsonOnSuccessListener);
+            return new BSJson(activity, server, jsObj, requestParams, bsJsonOnSuccessListener);
+        }
+    }
+
+    public void cancelRequest() {
+        if (isLoading){
+            Constant.client.cancelAllRequests(true);
         }
     }
 }
