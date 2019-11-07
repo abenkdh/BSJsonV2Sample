@@ -17,7 +17,7 @@ public class BSJson {
     private JsonObject jsObj;
     private BSJsonOnSuccessListener bsJsonOnSuccessListener;
     private RequestParams requestParams;
-    private boolean isLoading = false;
+    private static boolean isLoading = false;
 
     private BSJson(Activity activity,
                    String server,
@@ -128,7 +128,7 @@ public class BSJson {
         }
     }
 
-    public void cancelRequest() {
+    public static void cancelRequest() {
         if (isLoading){
             Constant.client.cancelAllRequests(true);
         }
