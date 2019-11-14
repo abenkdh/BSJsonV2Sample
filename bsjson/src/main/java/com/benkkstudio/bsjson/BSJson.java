@@ -1,6 +1,7 @@
 package com.benkkstudio.bsjson;
 
 import android.app.Activity;
+import android.widget.Toast;
 
 
 import com.benkkstudio.bsjson.Interface.BSJsonOnSuccessListener;
@@ -8,6 +9,8 @@ import com.google.gson.JsonObject;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
+import java.util.logging.Logger;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -17,23 +20,43 @@ public class BSJson {
     private JsonObject jsObj;
     private BSJsonOnSuccessListener bsJsonOnSuccessListener;
     private RequestParams requestParams;
-    private static boolean isLoading = false;
+    private String purchaseCode;
 
     private BSJson(Activity activity,
                    String server,
                    JsonObject jsObj,
                    RequestParams requestParams,
-                   BSJsonOnSuccessListener bsJsonOnSuccessListener) {
+                   BSJsonOnSuccessListener bsJsonOnSuccessListener,
+                   String purchaseCode) {
         this.activity = activity;
         this.server = server;
         this.jsObj = jsObj;
         this.requestParams = requestParams;
         this.bsJsonOnSuccessListener = bsJsonOnSuccessListener;
-        load();
+        this.purchaseCode = purchaseCode;
+        verifyNow();
+    }
+
+    private void verifyNow() {
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        params.put("code", purchaseCode);
+        client.addHeader("Authorization", "Bearer 031Cm94VBFWVIwOGuyvfTcvvmvF3EM9b");
+        client.addHeader("User-Agent", "Purchase code verification on benkkstudio.xyz");
+        client.get("https://api.envato.com/v3/market/author/sale", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                load();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(activity, "Your purchase code not valid", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void load() {
-        isLoading = true;
         if (jsObj != null) {
             Constant.client = new AsyncHttpClient();
             RequestParams params = new RequestParams();
@@ -89,7 +112,6 @@ public class BSJson {
                 }
             });
         }
-        isLoading = false;
     }
 
     public static class Builder {
@@ -98,6 +120,7 @@ public class BSJson {
         private JsonObject jsObj;
         private BSJsonOnSuccessListener bsJsonOnSuccessListener;
         private RequestParams requestParams;
+        private String purchaseCode;
         public Builder(Activity activity) {
             this.activity = activity;
         }
@@ -117,6 +140,10 @@ public class BSJson {
             return this;
         }
 
+        public BSJson.Builder setPurchaseCode(String purchaseCode) {
+            this.purchaseCode = purchaseCode;
+            return this;
+        }
 
         public BSJson.Builder setListener(BSJsonOnSuccessListener bsJsonOnSuccessListener) {
             this.bsJsonOnSuccessListener = bsJsonOnSuccessListener;
@@ -124,13 +151,7 @@ public class BSJson {
         }
 
         public BSJson load() {
-            return new BSJson(activity, server, jsObj, requestParams, bsJsonOnSuccessListener);
-        }
-    }
-
-    public static void cancelRequest() {
-        if (isLoading){
-            Constant.client.cancelAllRequests(true);
+            return new BSJson(activity, server, jsObj, requestParams, bsJsonOnSuccessListener, purchaseCode);
         }
     }
 }
